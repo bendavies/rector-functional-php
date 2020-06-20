@@ -1,0 +1,12 @@
+{
+    "name": "bendavies/rector-functional",
+    "require": {
+        "rector/rector": "dev-master",
+        "lstrojny/functional-php": "^1.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
