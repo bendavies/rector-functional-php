@@ -1,0 +1,49 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+name: "Integrate"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  rector:
+    name: "Rector"
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - 7.4
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Install PHP with extensions"
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v2
+
+      - name: "Determine composer cache directory"
+        id: determine-composer-cache-directory
+        run: echo ::set-output name=directory::$(composer config cache-dir)
+
+      - name: "Cache dependencies installed with composer"
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.determine-composer-cache-directory.outputs.directory }}
+          key: php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}
+          restore-keys: php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
+
+      - name: "Install locked dependencies from composer.lock"
+        run: composer install --prefer-dist  --no-interaction --no-progress --no-scripts
+
+      - name: "Run rector/rector"
+        run: vendor/bin/rector process -vvv
