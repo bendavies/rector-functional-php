@@ -1,6 +1,0 @@
-# rector.yaml
-parameters:
-    auto_import_names: true
-
-services:
-    Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector: null
