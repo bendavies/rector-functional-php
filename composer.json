@@ -1,7 +1,7 @@
 {
     "name": "bendavies/rector-functional",
     "require": {
-        "rector/rector": "^0.8.16",
+        "rector/rector": "dev-master",
         "lstrojny/functional-php": "^1.12"
     },
     "autoload": {
